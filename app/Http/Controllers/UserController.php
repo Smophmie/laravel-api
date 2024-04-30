@@ -89,6 +89,10 @@ class UserController extends Controller
 
             $user = User::where('email', $request->email)->first();
 
+            if(auth('sanctum')->check()){
+                auth()->user()->tokens()->delete();
+             }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Utilisateur connecté.',
