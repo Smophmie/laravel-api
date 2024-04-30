@@ -61,7 +61,6 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $product->delete();
-        return redirect('/v1/welcome')
-        ->with('success', 'product deleted successfully');
+        return ['Votre produit a bien été supprimé.'];
     }
 }
