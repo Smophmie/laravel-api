@@ -29,9 +29,12 @@ Route::prefix('/v1')->middleware(['auth:sanctum'])->group(function () {
     Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
 
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+});
 
+Route::prefix('/v1')->group(function () {
 
     Route::post('/register', [UserController::class, 'register'])->name('users.register');
 
     Route::post('/login', [UserController::class, 'login'])->name('users.login');
-});
+
+}
