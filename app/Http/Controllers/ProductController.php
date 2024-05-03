@@ -10,10 +10,27 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         $products = Product::all();
-        return $products;
+        foreach ($products as $product) {
+            $categoriesArray=[];
+            foreach ($product->categories as $category) {
+                $categoriesArray[] = $category->title;
+            }
+            $productsArray[] = [
+                'id'=>$product->id,
+                'name'=>$product->name,
+                'price'=>$product->price,
+                'stock'=>$product->stock,
+                'categories'=>$categoriesArray
+            ];
+        }
+        return response()->json(
+            $productsArray
+        );
+        
     }
 
     /**
@@ -21,13 +38,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->has('categories') && !is_array($request->categories)){
+            $categories = json_decode($request->categories, true);
+            $request->merge(['categories' => $categories]);
+        }
         $request->validate([
             'name' => 'required|max:255',
             'price' => 'required',
-            'stock' => 'required'
+            'stock' => 'required',
+            'categories' => 'sometimes|array|exists:categories,id'
           ]);
-            Product::create($request->all());
-            return $request;
+        $product = Product::create($request->all());
+        $product->categories()->attach($request->categories);
+        return $product;
     }
 
     /**
@@ -36,7 +59,18 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::find($id);
-        return $product;
+        $categoriesArray=[];
+        foreach ($product->categories as $category) {
+            $categoriesArray[] = $category->title;
+        }
+        
+    return response()->json([
+        'id'=>$product->id,
+        'name'=>$product->name,
+        'price'=>$product->price,
+        'stock'=>$product->stock,
+        'categories'=>$categoriesArray
+    ]);
     }
 
     /**
@@ -44,13 +78,25 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if ($request->has('categories') && !is_array($request->categories)){
+            $categories = json_decode($request->categories, true);
+            $request->merge(['categories' => $categories]);
+        }
+
         $request->validate([
             'name' => 'required|max:255',
             'price' => 'required',
-            'stock' => 'required'
+            'stock' => 'required',
+            'categories' => 'sometimes|array|exists:categories,id'
           ]);
+
           $product = Product::find($id);
           $product->update($request->all());
+
+          if ($request->has('categories')) {
+            $product->categories()->sync($request->categories);
+        }
+
           return $product;
     }
 
@@ -61,6 +107,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $product->delete();
+        $product->categories()->detach();
         return ['Votre produit a bien été supprimé.'];
     }
 }

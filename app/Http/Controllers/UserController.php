@@ -19,6 +19,15 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $user = User::find($id);
+        return $user;
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -41,18 +50,20 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => [
                 'required', 
-                'email', 
+                'email',
                 'unique:users,email'
             ],
             'password' => [
                 'required', 
                 'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/',                'confirmed'
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/',                
+                'confirmed'
             ],
             'password_confirmation'=> [
                 'required', 
                 'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/',                'same:password'
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]+$/',  
+                'same:password'
             ],
           ]);
            $user = User::create($request->all());

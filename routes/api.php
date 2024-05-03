@@ -4,13 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 
 Route::prefix('/v1')->middleware(['auth:sanctum'])->group(function () {
-    Route::get('/welcome', function () {
-        return "test";
-    });
-
-
+    
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
@@ -29,9 +26,24 @@ Route::prefix('/v1')->middleware(['auth:sanctum'])->group(function () {
     Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
 
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+
+    Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
+
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+
+    Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 Route::prefix('/v1')->group(function () {
+
+    Route::get('/welcome', function () {
+        return "test";
+    });
 
     Route::post('/register', [UserController::class, 'register'])->name('users.register');
 

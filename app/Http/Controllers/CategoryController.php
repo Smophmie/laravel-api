@@ -13,7 +13,20 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return $categories;
+        foreach ($categories as $category) {
+            $productsArray=[];
+            foreach ($category->products as $product) {
+                $productsArray[] = $product->name;
+            }
+            $categoriesArray[] = [
+                'id'=>$category->id,
+                'title'=>$category->title,
+                'products'=>$productsArray
+            ];
+        }
+        return response()->json(
+            $categoriesArray
+        );
     }
 
     /**
@@ -22,9 +35,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:255',
-            'price' => 'required',
-            'stock' => 'required'
+            'title' => 'required|max:255'
           ]);
             $newCategory = Category::create($request->all());
             return $newCategory;
@@ -35,8 +46,8 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::find($id);
-        return $product;
+        $category = Category::find($id);
+        return $category;
     }
 
     /**
@@ -45,13 +56,11 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|max:255',
-            'price' => 'required',
-            'stock' => 'required'
+            'title' => 'required|max:255'
           ]);
-          $product = Product::find($id);
-          $product->update($request->all());
-          return $product;
+          $category = Category::find($id);
+          $category->update($request->all());
+          return $category;
     }
 
     /**
@@ -59,8 +68,8 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $product = Product::find($id);
-        $product->delete();
-        return ['Votre produit a bien été supprimé.'];
+        $category = Category::find($id);
+        $category->delete();
+        return ['Votre categorie a bien été supprimée.'];
     }
 }
