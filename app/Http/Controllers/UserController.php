@@ -9,9 +9,23 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
-     */
+ * @OA\Get(
+ *     path="/users",
+ *     summary="Liste des utilisateurs",
+ *     description="Renvoie la liste de tous les utilisateurs.",
+ *     tags={"Utilisateurs"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Liste des utilisateurs récupérée avec succès.",
+ *         @OA\JsonContent(
+ *             type="array",
+ *             @OA\Items(ref="#/components/schemas/User")
+ *         ),
+ *     ),
+ * )
+ */
     public function index()
     {
         $users = User::all();
@@ -19,8 +33,30 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
+ * @OA\Get(
+ *     path="/users/{id}",
+ *     summary="Afficher les détails d'un utilisateur",
+ *     description="Récupère les détails d'un utilisateur spécifié par son ID.",
+ *     tags={"Utilisateurs"},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de l'utilisateur à afficher.",
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Détails de l'utilisateur récupérés avec succès.",
+ *         @OA\JsonContent(ref="#/components/schemas/User"),
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Utilisateur non trouvé.",
+ *     ),
+ * )
+ */
+   
     public function show(string $id)
     {
         $user = User::find($id);
@@ -28,8 +64,32 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
+ * @OA\Post(
+ *     path="/users",
+ *     summary="Créer un nouvel utilisateur",
+ *     description="Crée un nouvel utilisateur avec les détails fournis.",
+ *     tags={"Utilisateurs"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"name", "email", "password"},
+ *             @OA\Property(property="name", type="string", description="Nom de l'utilisateur."),
+ *             @OA\Property(property="email", type="string", format="email", description="Adresse e-mail de l'utilisateur."),
+ *             @OA\Property(property="password", type="string", format="password", description="Mot de passe de l'utilisateur."),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Utilisateur créé avec succès.",
+ *         @OA\JsonContent(ref="#/components/schemas/User"),
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation des données en échec.",
+ *     ),
+ * )
+ */
+
     public function store(Request $request)
     {
         $request->validate([
@@ -42,8 +102,36 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
+ * @OA\Post(
+ *     path="/register",
+ *     summary="Inscription d'un nouvel utilisateur",
+ *     description="Inscrit un nouvel utilisateur avec les détails fournis.",
+ *     tags={"Authentification"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"name", "email", "password", "password_confirmation"},
+ *             @OA\Property(property="name", type="string", description="Nom de l'utilisateur."),
+ *             @OA\Property(property="email", type="string", format="email", description="Adresse e-mail de l'utilisateur."),
+ *             @OA\Property(property="password", type="string", format="password", description="Mot de passe de l'utilisateur."),
+ *             @OA\Property(property="password_confirmation", type="string", format="password", description="Confirmation du mot de passe de l'utilisateur."),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Utilisateur inscrit avec succès.",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="user", ref="#/components/schemas/User"),
+ *             @OA\Property(property="token", type="string", description="Jetton d'accès JWT."),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation des données en échec.",
+ *     ),
+ * )
+ */
+
     public function register(Request $request)
     {
         $request->validate([
@@ -73,6 +161,49 @@ class UserController extends Controller
                 'token'=>$token,
             ]);
     }
+
+    /**
+ * @OA\Post(
+ *     path="/login",
+ *     summary="Authentification de l'utilisateur",
+ *     description="Authentifie l'utilisateur avec les informations d'identification fournies.",
+ *     tags={"Authentification"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"email", "password"},
+ *             @OA\Property(property="email", type="string", format="email", description="Adresse e-mail de l'utilisateur."),
+ *             @OA\Property(property="password", type="string", format="password", description="Mot de passe de l'utilisateur."),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Utilisateur connecté avec succès.",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=true, description="Statut de la requête."),
+ *             @OA\Property(property="message", type="string", example="Utilisateur connecté."),
+ *             @OA\Property(property="token", type="string", description="Jetton d'accès JWT."),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Erreur d'authentification.",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=false, description="Statut de la requête."),
+ *             @OA\Property(property="message", type="string", example="L'e-mail ou le mot de passe est incorrect."),
+ *             @OA\Property(property="errors", type="object", description="Erreurs de validation."),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Erreur interne du serveur.",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="boolean", example=false, description="Statut de la requête."),
+ *             @OA\Property(property="message", type="string", example="Erreur interne du serveur."),
+ *         ),
+ *     ),
+ * )
+ */
 
     public function login(Request $request)
     {
@@ -120,8 +251,42 @@ class UserController extends Controller
 
 
     /**
-     * Update the specified resource in storage.
-     */
+ * @OA\Put(
+ *     path="/users/{id}",
+ *     summary="Mettre à jour un utilisateur",
+ *     description="Met à jour les informations d'un utilisateur spécifié par son ID.",
+ *     tags={"Utilisateurs"},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de l'utilisateur à mettre à jour.",
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"name", "email", "password"},
+ *             @OA\Property(property="name", type="string", description="Nouveau nom de l'utilisateur."),
+ *             @OA\Property(property="email", type="string", format="email", description="Nouvelle adresse e-mail de l'utilisateur."),
+ *             @OA\Property(property="password", type="string", description="Nouveau mot de passe de l'utilisateur."),
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Utilisateur mis à jour avec succès.",
+ *         @OA\JsonContent(ref="#/components/schemas/User"),
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Utilisateur non trouvé.",
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Validation des données en échec.",
+ *     ),
+ * )
+ */
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -135,8 +300,32 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     */
+ * @OA\Delete(
+ *     path="/users/{id}",
+ *     summary="Supprimer un utilisateur",
+ *     description="Supprime un utilisateur spécifié par son ID.",
+ *     tags={"Utilisateurs"},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de l'utilisateur à supprimer.",
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Utilisateur supprimé avec succès.",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Utilisateur supprimé avec succès.")
+ *         ),
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Utilisateur non trouvé.",
+ *     ),
+ * )
+ */
+
     public function destroy(string $id)
     {
         $user = User::find($id);

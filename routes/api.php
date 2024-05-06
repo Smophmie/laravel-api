@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+// use L5Swagger\Http\Controllers\SwaggerController;
 
 Route::prefix('/v1')->middleware(['auth:sanctum'])->group(function () {
     
@@ -42,7 +43,7 @@ Route::prefix('/v1')->middleware(['auth:sanctum'])->group(function () {
 Route::prefix('/v1')->group(function () {
 
     Route::get('/welcome', function () {
-        return "test";
+        return "Bienvenue sur votre interface de gestion des stocks.";
     });
 
     Route::post('/register', [UserController::class, 'register'])->name('users.register');
@@ -50,3 +51,4 @@ Route::prefix('/v1')->group(function () {
     Route::post('/login', [UserController::class, 'login'])->name('users.login');
 
 });
+

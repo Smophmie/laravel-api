@@ -1,0 +1,1032 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Nom de votre API",
+        "description": "Description de votre API",
+        "contact": {
+            "email": "contact@example.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/categories": {
+            "get": {
+                "tags": [
+                    "Catégories"
+                ],
+                "summary": "Liste des catégories",
+                "description": "Renvoie la liste de toutes les catégories avec les produits qui leur sont associés.",
+                "operationId": "ead5fb1cf2a7453acb2e37928a1b1eaf",
+                "responses": {
+                    "200": {
+                        "description": "Liste des catégories récupérée avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID de la catégorie.",
+                                                "type": "integer"
+                                            },
+                                            "title": {
+                                                "description": "Titre de la catégorie.",
+                                                "type": "string"
+                                            },
+                                            "products": {
+                                                "description": "Liste des noms des produits associés à cette catégorie.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Catégories"
+                ],
+                "summary": "Créer une nouvelle catégorie",
+                "description": "Crée une nouvelle catégorie avec le titre fourni.",
+                "operationId": "bb02f0320882db37f99574196577e446",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "Titre de la nouvelle catégorie.",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Catégorie créée avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation des données en échec."
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Catégories"
+                ],
+                "summary": "Afficher les détails d'une catégorie",
+                "description": "Récupère les détails d'une catégorie spécifiée par son ID.",
+                "operationId": "4cdf41756315109f1efc72787db5830a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à afficher.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de la catégorie récupérés avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Catégories"
+                ],
+                "summary": "Mettre à jour une catégorie",
+                "description": "Met à jour les informations d'une catégorie spécifiée par son ID.",
+                "operationId": "19954b1f8aa4916b5f032dc28ea36a24",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à mettre à jour.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "Nouveau titre de la catégorie.",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Catégorie mise à jour avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée."
+                    },
+                    "422": {
+                        "description": "Validation des données en échec."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Catégories"
+                ],
+                "summary": "Supprimer une catégorie",
+                "description": "Supprime une catégorie spécifiée par son ID.",
+                "operationId": "f1b8af6e84bd52b9594d98bde748ebd6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la catégorie à supprimer.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Catégorie supprimée avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "La catégorie a été supprimée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Catégorie non trouvée."
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": [
+                    "Produits"
+                ],
+                "summary": "Liste des produits",
+                "description": "Renvoie la liste de tous les produits avec leurs détails et catégories.",
+                "operationId": "c1ff6f862214e1896c59cfe0491ce0e8",
+                "responses": {
+                    "200": {
+                        "description": "Liste des produits récupérée avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "description": "ID du produit.",
+                                                "type": "integer"
+                                            },
+                                            "name": {
+                                                "description": "Nom du produit.",
+                                                "type": "string"
+                                            },
+                                            "price": {
+                                                "description": "Prix du produit.",
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "stock": {
+                                                "description": "Stock disponible du produit.",
+                                                "type": "integer"
+                                            },
+                                            "image": {
+                                                "description": "URL de l'image du produit.",
+                                                "type": "string"
+                                            },
+                                            "categories": {
+                                                "description": "Catégories auxquelles appartient le produit.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Produits"
+                ],
+                "summary": "Créer un nouveau produit",
+                "description": "Crée un nouveau produit avec les détails fournis.",
+                "operationId": "399770d33fa4672f1216707d0e236763",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "price",
+                                    "stock"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom du produit.",
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "description": "Prix du produit.",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "stock": {
+                                        "description": "Stock disponible du produit.",
+                                        "type": "integer"
+                                    },
+                                    "categories": {
+                                        "description": "ID des catégories auxquelles appartient le produit.",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "imageinput": {
+                                        "description": "Image du produit (format: pdf, jpg, png, max: 2MB).",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Produit créé avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "tags": [
+                    "Produits"
+                ],
+                "summary": "Afficher les détails d'un produit",
+                "description": "Récupère les détails d'un produit spécifié par son ID.",
+                "operationId": "b46f4aa73232d0368eee698a082342a4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du produit à afficher.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du produit récupérés avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "description": "ID du produit.",
+                                            "type": "integer"
+                                        },
+                                        "name": {
+                                            "description": "Nom du produit.",
+                                            "type": "string"
+                                        },
+                                        "price": {
+                                            "description": "Prix du produit.",
+                                            "type": "number",
+                                            "format": "float"
+                                        },
+                                        "stock": {
+                                            "description": "Stock disponible du produit.",
+                                            "type": "integer"
+                                        },
+                                        "image": {
+                                            "description": "URL de l'image du produit.",
+                                            "type": "string"
+                                        },
+                                        "categories": {
+                                            "description": "Catégories auxquelles appartient le produit.",
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Produit non trouvé."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Produits"
+                ],
+                "summary": "Mettre à jour un produit",
+                "description": "Met à jour les détails d'un produit spécifié par son ID.",
+                "operationId": "1419d479f9340e30e67fe21a2ca525b7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du produit à mettre à jour.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom du produit.",
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "description": "Prix du produit.",
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "stock": {
+                                        "description": "Stock disponible du produit.",
+                                        "type": "integer"
+                                    },
+                                    "categories": {
+                                        "description": "ID des catégories auxquelles appartient le produit.",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "imageinput": {
+                                        "description": "Image du produit (format: pdf, jpg, png, max: 2MB).",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Produit mis à jour avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Produit non trouvé."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Produits"
+                ],
+                "summary": "Supprimer un produit",
+                "description": "Supprime un produit spécifié par son ID.",
+                "operationId": "fe34b364a3f192305598b65d04d06b5d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID du produit à supprimer.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produit supprimé avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Votre produit a bien été supprimé."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Produit non trouvé."
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Utilisateurs"
+                ],
+                "summary": "Liste des utilisateurs",
+                "description": "Renvoie la liste de tous les utilisateurs.",
+                "operationId": "7e2f5799553ec93c9c43e2a58490d447",
+                "responses": {
+                    "200": {
+                        "description": "Liste des utilisateurs récupérée avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Utilisateurs"
+                ],
+                "summary": "Créer un nouvel utilisateur",
+                "description": "Crée un nouvel utilisateur avec les détails fournis.",
+                "operationId": "a1fce870c566eb5fc0cf3178ec5d2fed",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de l'utilisateur.",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Adresse e-mail de l'utilisateur.",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Mot de passe de l'utilisateur.",
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur créé avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation des données en échec."
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "Utilisateurs"
+                ],
+                "summary": "Afficher les détails d'un utilisateur",
+                "description": "Récupère les détails d'un utilisateur spécifié par son ID.",
+                "operationId": "910a0c7cf580e1c605648d82a4e57f46",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'utilisateur à afficher.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de l'utilisateur récupérés avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Utilisateurs"
+                ],
+                "summary": "Mettre à jour un utilisateur",
+                "description": "Met à jour les informations d'un utilisateur spécifié par son ID.",
+                "operationId": "ddfe232db1870b82493bf8bd25596d37",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'utilisateur à mettre à jour.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nouveau nom de l'utilisateur.",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Nouvelle adresse e-mail de l'utilisateur.",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Nouveau mot de passe de l'utilisateur.",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur mis à jour avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé."
+                    },
+                    "422": {
+                        "description": "Validation des données en échec."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Utilisateurs"
+                ],
+                "summary": "Supprimer un utilisateur",
+                "description": "Supprime un utilisateur spécifié par son ID.",
+                "operationId": "43dd20becb1f47444e484cbb18ce345c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'utilisateur à supprimer.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur supprimé avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Utilisateur supprimé avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Utilisateur non trouvé."
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Inscription d'un nouvel utilisateur",
+                "description": "Inscrit un nouvel utilisateur avec les détails fournis.",
+                "operationId": "f1fde7f4a932e393f6042d1b92e65b0a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nom de l'utilisateur.",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Adresse e-mail de l'utilisateur.",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Mot de passe de l'utilisateur.",
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "Confirmation du mot de passe de l'utilisateur.",
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur inscrit avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "token": {
+                                            "description": "Jetton d'accès JWT.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation des données en échec."
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Authentification de l'utilisateur",
+                "description": "Authentifie l'utilisateur avec les informations d'identification fournies.",
+                "operationId": "abc53c091ac89d7a2af0892997d1ee08",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "Adresse e-mail de l'utilisateur.",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "Mot de passe de l'utilisateur.",
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur connecté avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Statut de la requête.",
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Utilisateur connecté."
+                                        },
+                                        "token": {
+                                            "description": "Jetton d'accès JWT.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Erreur d'authentification.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Statut de la requête.",
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "L'e-mail ou le mot de passe est incorrect."
+                                        },
+                                        "errors": {
+                                            "description": "Erreurs de validation.",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Statut de la requête.",
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erreur interne du serveur."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Category": {
+                "title": "Category",
+                "description": "Category model",
+                "properties": {
+                    "id": {
+                        "description": "ID de la catégorie",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Titre de la catégorie",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Date de création de la catégorie",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Date de mise à jour de la catégorie",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Product": {
+                "title": "Product",
+                "description": "Product model",
+                "properties": {
+                    "id": {
+                        "description": "ID du produit",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Nom du produit",
+                        "type": "string"
+                    },
+                    "price": {
+                        "description": "Prix du produit",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "stock": {
+                        "description": "Stock du produit",
+                        "type": "integer"
+                    },
+                    "image": {
+                        "description": "URL de l'image du produit",
+                        "type": "string",
+                        "format": "url"
+                    },
+                    "created_at": {
+                        "description": "Date de création du produit",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Date de mise à jour du produit",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "description": "ID de l'utilisateur",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Nom de l'utilisateur",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Adresse e-mail de l'utilisateur",
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "description": "Mot de passe de l'utilisateur",
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "created_at": {
+                        "description": "Date de création de l'utilisateur",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Date de mise à jour de l'utilisateur",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "profile_photo_url": {
+                        "description": "URL de la photo de profil de l'utilisateur",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
