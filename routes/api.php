@@ -5,9 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
-// use L5Swagger\Http\Controllers\SwaggerController;
 
-Route::prefix('/v1')->middleware(['auth:sanctum'])->group(function () {
+
+// ->middleware(['auth:sanctum'])
+
+Route::prefix('/v1')->group(function () {
     
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 

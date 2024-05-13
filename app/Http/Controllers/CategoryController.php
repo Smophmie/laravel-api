@@ -46,6 +46,7 @@ class CategoryController extends Controller
             $categoriesArray[] = [
                 'id'=>$category->id,
                 'title'=>$category->title,
+                'description'=>$category->description,
                 'products'=>$productsArray
             ];
         }
@@ -82,7 +83,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|max:255'
+            'title' => 'required|max:255',
+            'description' => 'required|max:255'
           ]);
             $newCategory = Category::create($request->all());
             return $newCategory;
@@ -159,7 +161,8 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'title' => 'required|max:255'
+            'title' => 'required|max:255',
+            'description' => 'required|max:255'
           ]);
           $category = Category::find($id);
           $category->update($request->all());
